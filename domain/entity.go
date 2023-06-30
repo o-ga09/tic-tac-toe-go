@@ -5,6 +5,7 @@ type Board struct {
 }
 
 type Koma struct {
+	Order int
 	X int
 	Y int
 }

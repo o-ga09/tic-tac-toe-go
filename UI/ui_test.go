@@ -3,7 +3,6 @@ package ui_test
 import (
 	"bytes"
 	ui "go-tic-tac-toe/UI"
-	"go-tic-tac-toe/domain"
 	"go-tic-tac-toe/util"
 	"testing"
 
@@ -12,17 +11,25 @@ import (
 
 func TestInput(t *testing.T) {
 	in := bytes.NewBufferString("hoge")
-	got := ui.Input(in)
+	driver := &ui.IODriverImpl{}
+	got := driver.Input(in)
 	assert.Equal(t,"hoge",got)
 }
 
 func TestDisplay(t *testing.T) {
-	board := &domain.Board{}
-	board.Init()
-	got := util.PickStdout(t, ui.Display)
+	displayFn := func() {
+		i := &ui.IODriverImpl{}
+		b := [][]string{}
+		util.BoardInit(&b)
+		driverBoard := ui.DriverBoard{Board: b} 
+		i.Display(driverBoard)
+	}
+
+	result := util.PickStdout(t, displayFn)
+	
 	for i := 0; i < 3; i++ {
 		for j := 0; j < 3; j++ {
-			assert.Equal(t,"---\n---\n---\n",got)
+			assert.Equal(t,"---\n---\n---\n",result)
 		}
 	}
 }

@@ -23,3 +23,15 @@ func PickStdout(t *testing.T, fnc func()) string {
 	s := buffer.String()
 	return s
 }
+
+func BoardInit(b *[][]string) {
+	*b = make([][]string, 3)
+	for i := 0; i < 3; i++ {
+		(*b)[i] = make([]string, 3)
+	}
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 3; j++ {
+			(*b)[i][j] = "-"
+		}
+	}
+}

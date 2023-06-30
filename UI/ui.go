@@ -2,12 +2,18 @@ package ui
 
 import (
 	"fmt"
-	"go-tic-tac-toe/domain"
 	"io"
 	"os"
 )
 
-func Input(in io.Reader) string {
+type IODriver interface {
+	Input(io.Reader)
+	Display(DriverBoard)
+}
+
+type IODriverImpl struct {}
+
+func (i *IODriverImpl) Input(in io.Reader) string {
 	if in == nil {
 		in = os.Stdin
 	}
@@ -17,11 +23,15 @@ func Input(in io.Reader) string {
 	return str
 }
 
-func Display(board domain.Board) {
+func (i *IODriverImpl) Display(board DriverBoard) {
 	for i := 0; i < 3; i++ {
 		for j := 0; j < 3; j++ {
 			fmt.Printf("%s",board.Board[i][j])
 		}
 		fmt.Printf("\n")
 	}
+}
+
+type DriverBoard struct {
+	Board [][]string
 }
