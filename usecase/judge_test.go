@@ -2,7 +2,7 @@ package usecase_test
 
 import (
 	"go-tic-tac-toe/domain"
-	mock_port "go-tic-tac-toe/mock"
+	mock_port "go-tic-tac-toe/mock/port"
 	"go-tic-tac-toe/usecase"
 	"testing"
 
@@ -25,6 +25,7 @@ func TestDisplay(t *testing.T) {
 	defer mock.Finish()
 
 	mockResult := mock_port.NewMockGameInterface(mock)
+	mockResult.EXPECT().Display(&domain.Board{}).AnyTimes().Return(nil)
 	gameservice := usecase.ProviderGameDriver(mockResult)
 	got := gameservice.Display(&domain.Board{})
 	assert.Equal(t,nil,got)
@@ -35,8 +36,11 @@ func TestInput(t *testing.T) {
 	defer mock.Finish()
 	
 	mockResult := mock_port.NewMockGameInterface(mock)
+	mockResult.EXPECT().Input(1).AnyTimes().Return(domain.Koma{Order: 1,X: 1,Y: 2},nil)
+
 	gameservice := usecase.ProviderGameDriver(mockResult)
-	got, err := gameservice.Input()
-	assert.Equal(t,domain.Koma{X: 0,Y: 0},got)
+	gameservice.Init()
+	got, err := gameservice.Input(1)
+	assert.Equal(t,domain.Koma{Order: 1,X: 1,Y: 2},got)
 	assert.Equal(t,nil,err)
 }

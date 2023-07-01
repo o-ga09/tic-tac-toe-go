@@ -4,7 +4,6 @@ import (
 	"errors"
 	"go-tic-tac-toe/domain"
 	"go-tic-tac-toe/gateway/port"
-	"strconv"
 )
 
 type GameService struct {
@@ -21,8 +20,13 @@ const (
 func ProviderGameDriver(gameGateway port.GameInterface) GameService {
 	return GameService{
 		gameInterface: gameGateway,
-		board: &domain.Board{},
 	}
+}
+
+func (g *GameService) Init() *domain.Board {
+	g.board = &domain.Board{Board: [3][3]string{}}
+	g.board.Init()
+	return g.board
 }
 
 func (g *GameService) IsWin(board domain.Board) bool {
@@ -34,12 +38,13 @@ func (g *GameService) IsWin(board domain.Board) bool {
 }
 
 func (g *GameService) Display(board *domain.Board) error {
+	err := g.gameInterface.Display(board)
 
-	return nil
+	return err
 }
 
-func (g *GameService) Input() (domain.Koma, error) {
-	res, err := g.gameInterface.Input()
+func (g *GameService) Input(player int) (domain.Koma, error) {
+	res, err := g.gameInterface.Input(player)
 	if err != nil {
 		return domain.Koma{}, err
 	}
@@ -49,7 +54,14 @@ func (g *GameService) Input() (domain.Koma, error) {
 	if !isEmpty(g.board,res) {
 		return domain.Koma{},errors.New("koma is exist")
 	} 
-	g.board.Board[res.X][res.Y] = strconv.Itoa(res.Order)
+
+	switch (player) {
+	case 1:
+		g.board.Board[res.X][res.Y] = "○"
+	case 2:
+		g.board.Board[res.X][res.Y] = "×"
+	default :
+	}
 	return domain.Koma{Order: res.Order,X: res.X,Y: res.Y}, nil
 }
 

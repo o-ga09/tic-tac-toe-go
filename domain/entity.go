@@ -13,7 +13,7 @@ type Koma struct {
 func (b *Board) Init() {
 	for i := 0; i < 3; i++ {
 		for j := 0; j < 3; j++ {
-			b.Board[i][j] = "-"
+			(*b).Board[i][j] = "-"
 		}
 	}
 }

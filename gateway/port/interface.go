@@ -7,5 +7,5 @@ import (
 type GameInterface interface {
 	IsWin(domain.Board) bool
 	Display(b *domain.Board) error
-	Input() (domain.Koma, error)
+	Input(int) (domain.Koma, error)
 }

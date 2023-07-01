@@ -1,6 +1,7 @@
 package ui_test
 
 import (
+	"bufio"
 	"bytes"
 	ui "go-tic-tac-toe/UI"
 	"go-tic-tac-toe/util"
@@ -10,10 +11,16 @@ import (
 )
 
 func TestInput(t *testing.T) {
-	in := bytes.NewBufferString("hoge")
-	driver := &ui.IODriverImpl{}
-	got := driver.Input(in)
-	assert.Equal(t,"hoge",got)
+	in := bytes.NewBufferString("1,2")
+
+	// スペースで区切られた文字列を読み込む
+	scanner := bufio.NewScanner(in)
+	scanner.Split(bufio.ScanWords)
+
+	driver := ui.PrioviderUIDriver()
+	got,err := driver.Input(in)
+	assert.Equal(t,ui.DriverKoma{X: 1,Y: 2},got)
+	assert.Equal(t,nil,err)
 }
 
 func TestDisplay(t *testing.T) {

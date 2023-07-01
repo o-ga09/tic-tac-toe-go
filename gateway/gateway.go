@@ -10,18 +10,28 @@ type GameGateway struct {
 	gameDriver ui.IODriver
 }
 
-func ProviderGameDriver(gameDriver ui.IODriver) GameGateway {
-	return GameGateway{gameDriver: gameDriver}
+func ProviderGameDriver(gameDriver ui.IODriver) *GameGateway {
+	return &GameGateway{gameDriver: gameDriver}
 }
 
-func (gate *GameGateway) Input() (domain.Koma, error) {
+func (gate *GameGateway) Input(player int) (domain.Koma, error) {
 	var in io.Reader
 	res, err := gate.gameDriver.Input(in)
-	return domain.Koma{Order: res.Order,X: res.X,Y: res.Y}, err
+	return domain.Koma{Order: player,X: res.X,Y: res.Y}, err
 }
 
 func (gate *GameGateway) Display(board *domain.Board) error {
-	err := gate.gameDriver.Display(ui.DriverBoard{})
+	// 2次元スライスへの変換
+	slice := make([][]string, len(board.Board))
+	for i := range board.Board {
+		slice[i] = make([]string, len(board.Board[i]))
+		copy(slice[i], board.Board[i][:])
+	}
+	driverBoard := ui.DriverBoard{
+		Board: slice,
+	}
+
+	err := gate.gameDriver.Display(driverBoard)
 	return err
 }
 

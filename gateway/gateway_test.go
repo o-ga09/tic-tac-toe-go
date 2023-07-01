@@ -18,9 +18,9 @@ func TestInput(t *testing.T) {
 
 	var in io.Reader
 	mockResult := mock_ui.NewMockIODriver(mock)
-	mockResult.EXPECT().Input(in).AnyTimes().Return(ui.DriverKoma{Order: 0,X: 0,Y: 0},nil)
+	mockResult.EXPECT().Input(in).AnyTimes().Return(ui.DriverKoma{X: 0,Y: 0},nil)
 	gamegateway := gateway.ProviderGameDriver(mockResult)
-	got, err := gamegateway.Input()
+	got, err := gamegateway.Input(0)
 	assert.Equal(t, domain.Koma{Order: 0,X: 0,Y: 0}, got)
 	assert.Equal(t,nil,err)
 }
@@ -30,7 +30,9 @@ func TestDisplay(t *testing.T) {
 	defer mock.Finish()
 
 	mockResult := mock_ui.NewMockIODriver(mock)
-	mockResult.EXPECT().Display(ui.DriverBoard{}).AnyTimes().Return(nil)
+	mockResult.EXPECT().Display(ui.DriverBoard{
+		Board: [][]string{{"", "", ""}, {"", "", ""}, {"", "", ""}},
+	}).AnyTimes().Return(nil)
 	gamegateway := gateway.ProviderGameDriver(mockResult)
 	err := gamegateway.Display(&domain.Board{})
 	assert.Equal(t,nil,err)
