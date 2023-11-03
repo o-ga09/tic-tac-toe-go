@@ -16,7 +16,7 @@
 go build cmd/main.go
 ```
 
-## ❗️ Hoe to Run
+## ❗️ How to Run
 
 ```bash
 go run cmd/main.go
