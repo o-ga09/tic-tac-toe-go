@@ -6,17 +6,17 @@
 
 <img src="./doc/tictactoe-go.gif">
 
-##　 🎉 How to Play
+## 🎉 How to Play
 
 通常の三目並べ同様、縦、横、斜めどれか一つを先に揃えた方の勝ち
 
-##　 ⚙️ How to Build
+## ⚙️ How to Build
 
 ```bash
 go build cmd/main.go
 ```
 
-##　 ❗️ Hoe to Run
+## ❗️ Hoe to Run
 
 ```bash
 go run cmd/main.go
